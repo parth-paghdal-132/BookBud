@@ -1,2 +1,2 @@
 # BookBud
-This is our academic group project for Couse CS-545
+This is our academic group project for Course CS-545

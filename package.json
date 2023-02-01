@@ -1,0 +1,38 @@
+{
+  "name": "book_buds",
+  "version": "1.0.0",
+  "description": "This is academic group project for course CS-545. Here user can write or read reviews of books.",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/parth-paghdal-132/BookBud.git"
+  },
+  "keywords": [
+    "bookbuds",
+    "book",
+    "reviews",
+    "all",
+    "author",
+    "group",
+    "project"
+  ],
+  "author": "Group 4 (BookBud)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/parth-paghdal-132/BookBud/issues"
+  },
+  "homepage": "https://github.com/parth-paghdal-132/BookBud#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.18.2",
+    "express-handlebars": "^6.0.7",
+    "express-session": "^1.17.3",
+    "mongodb": "^5.0.0",
+    "nodemon": "^2.0.20",
+    "xss": "^1.0.14"
+  }
+}
