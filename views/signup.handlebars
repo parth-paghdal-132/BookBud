@@ -1,0 +1,65 @@
+<section class="vh-100">
+    <div class="container-fluid h-custom">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-md-8 col-lg-5 col-xl-4">
+                <h1 class="text-center mb-3">Sign up</h1>
+                <img src="/public/icons/cancel_ticket_draft.png" class="img-fluid">
+            </div>
+            <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1 p-5">
+                <div class="alert alert-danger d-none" role="alert" id="otherErrors"></div>
+                <form class="needs-validation mb-5" action="/auth/signup" method="post" id="signUpForm">
+                <div class="mb-3">
+                    <label for="name" class="form-label">* Name</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="John Doe" required>
+                    <div class="invalid-feedback" id="errName"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">* E-mail</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="john.doe@email.com" required>
+                    <div class="invalid-feedback" id="errEmail"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="username" class="form-label">* Username</label>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="john123" required>
+                    <div class="form-text">Your username must be greater than 2 character long and it should contain alphabets and number only.</div>
+                    <div class="invalid-feedback" id="errUsername"></div>
+                </div>                    
+                <div class="">
+                    <label for="password" class="form-label">* Password</label>
+                </div>
+                <div class="input-group has-validation">
+                    <input type="password" name="password" id="password" class="form-control" required>
+                    <button class="btn btn-outline-secondary" type="button" id="btnPasswordToggle">
+                        <i class="bi-eye-slash-fill" id="passwordToggle"></i>
+                    </button>
+                    <div class="invalid-feedback" id="errPassword"></div>
+                </div>
+                <div class="form-text mb-3">Your password must be greater than 5 character long and it should contain at least one lowercase letter, uppercase letter, number and special character.</div>
+                <div class="">
+                    <label for="reEnterPassword" class="form-label">* Re-enter password</label>
+                </div>
+                <div class="mb-3 input-group has-validation">
+                    <input type="password" name="reEnterPassword" id="reEnterPassword" class="form-control" required>
+                    <button class="btn btn-outline-secondary" type="button" id="btnReEnterPasswordToggle">
+                        <i class="bi-eye-slash-fill" id="reEnterPasswordToggle"></i>
+                    </button>
+                    <div class="invalid-feedback" id="errReEnterPassword"></div>
+                </div>
+                <div class="">
+                    <button type="submit" class="btn btn-primary" id="btnSignup">Sign Up</button>
+                </div>
+                <div class="mt-2"><p>Already have a account? <a href="/auth/login">Login</a></p></div>
+            </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="/public/js/signUpValidations.js"></script>
+<script>
+    {{#if hasErrors}}
+    const errorJsonString = `{{{errors}}}`
+    const dataJsonStrign = `{{{data}}}`
+    showErrorAndFillData(JSON.parse(errorJsonString), JSON.parse(dataJsonStrign))
+    {{/if}}
+</script>

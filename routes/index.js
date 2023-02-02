@@ -1,8 +1,7 @@
 const authRoutes = require("./authRoutes")
 
 const configRoutes = (app) => {
-    app.use("/login", authRoutes)
-    app.use("/signup", authRoutes)
+    app.use("/auth", authRoutes)
 
 
     app.use("*", (req, res) => {
