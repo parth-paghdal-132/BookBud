@@ -1,6 +1,8 @@
 const authRoutes = require("./authRoutes")
+const mainRoutes = require("./mainRoutes")
 
 const configRoutes = (app) => {
+    app.use("/", mainRoutes)
     app.use("/auth", authRoutes)
 
 

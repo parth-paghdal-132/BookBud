@@ -26,7 +26,18 @@ app.use(
 		resave: false,
 		saveUninitialized: true,
   	})
-);
+)
+
+app.use(async (req, res, next) => {
+	if(req.session.user) {
+		res.locals.isAuthenticated = true
+		res.locals.userId = req.session.user.userId
+		res.locals.name = req.session.user.name
+	} else {
+		res.locals.isAuthenticated = false
+	}
+	next()
+})
 
 configRoutes(app)
 
