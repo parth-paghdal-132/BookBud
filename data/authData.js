@@ -48,24 +48,24 @@ const createUser = async (name, email, username, password, reEnterPassword) => {
     return getUserById(insertInfo.insertedId.toString())
 }
 
-const authenticateUser = async (username, password) => {
-    username = xss(username).trim()
+const authenticateUser = async (email, password) => {
+    email = xss(email).trim()
     password = xss(password).trim()
 
     let errors = {}
-    authValidations.isValidUserName(username, errors)
+    authValidations.isValidEmail(email, errors)
     authValidations.isValidPassword(password, errors)
 
     const usersCollection = await users()
-    const user = await usersCollection.findOne({username: username.toLowerCase()})
+    const user = await usersCollection.findOne({email: email})
     if(user === null) {
-        errors.other = "Either the username or password is invalid"
+        errors.other = "Either the email or password is invalid"
         throw errors
     }
 
     let isPasswordMath = await bcryptJS.compare(password, user.password)
 	if(!isPasswordMath) {
-		errors.other = "Either the username or password is invalid"
+		errors.other = "Either the email or password is invalid"
         throw errors
 	}
 

@@ -33,7 +33,7 @@ const isValidEmail = (str, errors) => {
         errors.email = "Supplied email must be in string format."
         throw errors
     }
-    if(email.length == 0) {
+    if(str.length == 0) {
         errors.email = "Supplied email can not be empty."
         throw errors
     }

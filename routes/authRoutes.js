@@ -29,15 +29,15 @@ router
             return res.redirect("/")
         }
         let errors = {}
-        let username = req.body.username
+        let email = req.body.email
         let password = req.body.password
 
         let requestedData = {
-            username: username,
+            email: email,
             password: password
         }
         try {
-            authValidations.isValidUserName(username, errors)
+            authValidations.isValidEmail(email, errors)
             authValidations.isValidPassword(password, errors)
         } catch(exception) {
             return res.status(200).render("login", {
@@ -50,7 +50,7 @@ router
         }
 
         try {
-            let user = await authData.authenticateUser(username, password)
+            let user = await authData.authenticateUser(email, password)
             if(user == null) {
                 return res.status(200).render("login", {
                     title: "Login",
@@ -113,9 +113,9 @@ router
             reEnterPassword: reEnterPassword
         }
         try {
-            authValidations.isValidUserName(username, errors)
-            authValidations.isValidEmail(email, errors)
             authValidations.isValidName(name, errors)
+            authValidations.isValidEmail(email, errors)
+            authValidations.isValidUserName(username, errors)
             authValidations.isValidPassword(password, errors)
             authValidations.isValidPassword(reEnterPassword, errors)
         } catch(exception) {
@@ -189,4 +189,10 @@ router
         }
     })
     
+router
+    .route("/logout")
+    .get(async (req, res) => {
+        req.session.destroy()
+        return res.redirect("/")
+    })
 module.exports = router

@@ -41,7 +41,7 @@ txtReEnterPassword.addEventListener("input", (event) => {
 signUpForm.addEventListener("submit", (event) => {
     hideOtherErrorArea()
     if(!isValidData()) {
-        event.preventDefault
+        event.preventDefault()
     }
 })
 
@@ -147,7 +147,7 @@ function isValidData() {
     } else if(username.length === 0) {
         showError(txtUsername, errUsername, "Supplied username can not be empty.")
         isValidData = false
-    } else if(!usernamePattern.test(email)) {
+    } else if(!usernamePattern.test(username)) {
         showError(txtUsername, errUsername, "Please supply valid username.")
         isValidData = false
     } else {

@@ -6,29 +6,38 @@
                 <img src="/public/icons/sample_image.jpg" class="img-fluid">
             </div>
             <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1 p-5">
+                <div class="alert alert-danger d-none" role="alert" id="otherErrors"></div>
                 <form class="needs-validation mb-5" action="/auth/login" method="post" id="loginForm">
-
-                <div class="mb-3">
-                    <label for="email" class="form-label">* E-mail</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="john.doe@email.com" required>
-                    <div class="invalid-feedback" id="errEmail"></div>
-                </div>                  
-                <div class="">
-                    <label for="password" class="form-label">* Password</label>
-                </div>
-                <div class="input-group has-validation mb-3">
-                    <input type="password" name="password" id="password" class="form-control" required>
-                    <button class="btn btn-outline-secondary" type="button" id="passwordToggle">
-                        <i class="bi-eye-slash-fill" id="passwordToggle"></i>
-                    </button>
-                    <div class="invalid-feedback" id="errPassword"></div>
-                </div>
-                <div class="">
-                    <button type="submit" class="btn btn-primary" id="btnLogin">Login</button>
-                </div>
-                <div class="mt-2"><p>Do not have account? <a href="/auth/signup">Signup</a></p></div>
-            </form>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">* E-mail</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="john.doe@email.com" required>
+                        <div class="invalid-feedback" id="errEmail"></div>
+                    </div>                  
+                    <div class="">
+                        <label for="password" class="form-label">* Password</label>
+                    </div>
+                    <div class="input-group has-validation mb-3">
+                        <input type="password" name="password" id="password" class="form-control" required>
+                        <button class="btn btn-outline-secondary" type="button" id="btnPasswordToggle">
+                            <i class="bi-eye-slash-fill" id="passwordToggle"></i>
+                        </button>
+                        <div class="invalid-feedback" id="errPassword"></div>
+                    </div>
+                    <div class="">
+                        <button type="submit" class="btn btn-primary" id="btnLogin">Login</button>
+                    </div>
+                    <div class="mt-2"><p>Do not have account? <a href="/auth/signup">Signup</a></p></div>
+                </form>
             </div>
         </div>
     </div>
 </section>
+
+<script src="/public/js/loginValidations.js"></script>
+<script>
+    {{#if hasErrors}}
+    const errorJsonString = `{{{errors}}}`
+    const dataJsonStrign = `{{{data}}}`
+    showErrorAndFillData(JSON.parse(errorJsonString), JSON.parse(dataJsonStrign))
+    {{/if}}
+</script>
