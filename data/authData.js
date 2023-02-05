@@ -40,11 +40,13 @@ const createUser = async (name, email, username, password, reEnterPassword) => {
 	}
     const usersCollection = await users()
     const insertInfo = await usersCollection.insertOne(user)
+
     if (!insertInfo.acknowledged || !insertInfo.insertedId){
         errors.other = "Could not create movie"
         errors.code = 500
 		throw errors
 	}
+
     return getUserById(insertInfo.insertedId.toString())
 }
 
@@ -119,13 +121,17 @@ const getUserById = async (userId) => {
 
     authValidations.isValidId(userId, "user id", errors)
 
+
     const usersCollection = await users()
-    const user = await usersCollection.findOne({_id: ObjectId(userId)})
+    const user = await usersCollection.findOne({_id: new ObjectId(userId)})
+
+
     if(user === null) {
         errors.other = "Either the username or password is invalid"
         errors.code = 404
         throw errors
     }
+
 
     return user
 }
