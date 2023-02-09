@@ -1,0 +1,22 @@
+.book-image {
+    width: 50%;
+    height: auto;
+}
+
+.book-description {
+    width: 50%;
+    height: 200px;
+    overflow-y: scroll;
+}
+
+.left-column {
+    padding: 20px;
+    backdrop-filter: blur(15px);
+    border-radius: 10%;
+}
+
+.right-column {
+    padding: 20px;
+    backdrop-filter: blur(15px);
+    border-radius: 10%;
+}

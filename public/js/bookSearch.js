@@ -17,7 +17,7 @@ searchButton.addEventListener('click', function() {
             data.items.forEach(book => {
                 const bookCard = bookCardTemplate
                     .replace('src=""', `src="${book.volumeInfo.imageLinks.thumbnail}"`)
-                    .replace('href=""', `href="/auth/login"`)
+                    .replace('href=""', `href="/bookinfo/${book.id}"`)
                     .replace('<h5 class="card-title"></h5>', `<h5 class="card-title">${book.volumeInfo.title}</h5>`);
 
                 resultsContainer.insertAdjacentHTML('beforeend', bookCard);

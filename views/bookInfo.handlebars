@@ -1,0 +1,30 @@
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 left-column">
+            <h2 class="mb-3">{{ book.volumeInfo.title }}</h2>
+            <img src="{{ book.volumeInfo.imageLinks.thumbnail }}" class="book-image img-fluid mb-3" alt="Book Cover">
+            <h3 class="mb-3">Volume Information</h3>
+            <p><strong>Author(s): </strong>{{book.volumeInfo.authors}}</p>
+            <p><strong>Description: </strong></p>
+            <p class="book-description" style="max-height: 200px; overflow-y: scroll;"> {{book.volumeInfo.description}}</p>
+            <p><strong>Category: </strong>{{book.volumeInfo.categories}}</p>
+        </div>
+        <div class="col-sm-6 right-column">
+            <h2 class="mb-3">Reviews</h2>
+            <div class="grid-container d-flex flex-wrap">
+                {{#each reviews}}
+                    <div class="grid-box p-3 mb-3" style="background-color: rgba(255, 255, 255, 0.7);">
+                        <p class="text-justify">{{ this.review }}</p>
+                        <p class="text-muted">Reviewer: {{ this.reviewer }}</p>
+                    </div>
+                {{/each}}
+            </div>
+            <h2 class="mb-3">Add a Review</h2>
+            <form action="/reviews" method="post">
+                <textarea name="review" class="form-control mb-3"></textarea>
+                <input type="text" name="reviewer" class="form-control mb-3">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
