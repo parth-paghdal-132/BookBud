@@ -15,12 +15,12 @@
                 {{#each reviews}}
                     <div class="grid-box p-3 mb-3" style="background-color: rgba(255, 255, 255, 0.7);">
                         <p class="text-justify">{{ this.review }}</p>
-                        <p class="text-muted">Reviewer: {{ this.reviewer }}</p>
+                        <p class="text-muted">Reviewer: {{ this.userThatPostedReview }}</p>
                     </div>
                 {{/each}}
             </div>
             <h2 class="mb-3">Add a Review</h2>
-            <form action="/reviews" method="post">
+            <form action="/bookinfo/{{book.id}}/reviews" method="post">
                 <textarea name="review" class="form-control mb-3"></textarea>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
