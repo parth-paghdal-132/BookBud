@@ -4,8 +4,8 @@
 }
 
 .book-description {
-    width: 50%;
-    height: 200px;
+    width: 80%;
+    height: 250px;
     overflow-y: scroll;
 }
 

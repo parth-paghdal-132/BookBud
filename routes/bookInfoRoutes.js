@@ -35,6 +35,7 @@ router
     .post(async (req, res) => {
         try {
             const newBook = await createReview(req.body.review, req.params.bookId, req.session.user._id, req.session.user.username )
+
             res.redirect(`/bookinfo/${req.params.bookId}`)
         }
         catch (e) {

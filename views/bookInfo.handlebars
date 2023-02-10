@@ -6,14 +6,14 @@
             <h3 class="mb-3">Volume Information</h3>
             <p><strong>Author(s): </strong>{{book.volumeInfo.authors}}</p>
             <p><strong>Description: </strong></p>
-            <p class="book-description" style="max-height: 200px; overflow-y: scroll;"> {{book.volumeInfo.description}}</p>
+            <p class="book-description"> {{book.volumeInfo.description}}</p>
             <p><strong>Category: </strong>{{book.volumeInfo.categories}}</p>
         </div>
         <div class="col-sm-6 right-column">
             <h2 class="mb-3">Reviews</h2>
-            <div class="grid-container d-flex flex-wrap">
+            <div class="grid-container d-flex flex-wrap" style="max-height: 500px; overflow-y: scroll; margin-bottom: 30px">
                 {{#each reviews}}
-                    <div class="grid-box p-3 mb-3" style="background-color: rgba(255, 255, 255, 0.7);">
+                    <div class="grid-box p-3 mb-3" style="background-color: rgba(255, 255, 255, 0.6); border: 1px solid #ccc">
                         <p class="text-justify">{{ this.review }}</p>
                         <p class="text-muted">Reviewer: {{ this.userThatPostedReview }}</p>
                     </div>

@@ -28,6 +28,14 @@ app.use(
   	})
 )
 
+app.post('/bookinfo/:bookId/reviews', (req, res, next) => {
+	if (!req.session.user) {
+		return res.redirect('/auth/login')
+	}
+	next();
+
+})
+
 app.use(async (req, res, next) => {
 	if(req.session.user) {
 		res.locals.isAuthenticated = true
