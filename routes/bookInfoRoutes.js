@@ -1,13 +1,14 @@
 const express = require("express")
 const router = express.Router()
 const xss = require("xss")
+const axios = require("axios")
 const {getBookByBookId, createBook, createReview} = require("../data/bookInfoData");
 
 router
     .route("/:bookId")
     .get(async (req, res) => {
         const bookID = xss(req.params.bookId);
-        let book
+        let book = null
         try {
             book = await getBookByBookId(bookID)
         }
@@ -15,20 +16,22 @@ router
             return res.status(400).json(`Error: ${e}`);
         }
 
-        fetch(`https://www.googleapis.com/books/v1/volumes?q=${bookID}`)
-            .then(response => response.json())
-            .then(async data => {
-                // Do something with the book information
-                if (book === null) {
-                    const {title, author} = data.items[0].volumeInfo
-                    book = await createBook(title, author, bookID)
-                }
-                res.render("bookInfo", {book: data.items[0], showNav: true, reviews: book.reviews})
-            })
-            .catch(error => {
+        if(book === null){
+            try {
+                let {data} = await axios.get(`https://www.googleapis.com/books/v1/volumes?q=${bookID}`)
+                let volumeInfo = data.items[0].volumeInfo
+                let title = volumeInfo.title
+                let authors = volumeInfo.authors
+                let description = volumeInfo.description
+                let categories = volumeInfo.categories
+                let thumbImage = volumeInfo.imageLinks.thumbnail
+                book = await createBook(title, authors, description, categories, bookID, thumbImage)
+            } catch(exception) {
                 console.error(error);
-                res.sendStatus(500);
-            });
+                return res.sendStatus(500);
+            }   
+        }
+        return res.render("bookInfo", {book: book, showNav: true, reviews: book.reviews})
     })
 router
     .route("/:bookId/reviews")

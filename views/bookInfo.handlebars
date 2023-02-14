@@ -1,29 +1,29 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-6 left-column">
-            <h2 class="mb-3">{{ book.volumeInfo.title }}</h2>
-            <img src="{{ book.volumeInfo.imageLinks.thumbnail }}" class="book-image img-fluid mb-3" alt="Book Cover">
+            <h2 class="mb-3"> {{book.title}}</h2>
+            <img src="{{ book.thumbImage }}" class="book-image img-fluid mb-3" alt="Book Cover">
             <h3 class="mb-3">Volume Information</h3>
-            <p><strong>Author(s): </strong>{{book.volumeInfo.authors}}</p>
+            <p><strong>Author(s): </strong>{{book.authors}}</p>
             <p><strong>Description: </strong></p>
-            <p class="book-description"> {{book.volumeInfo.description}}</p>
-            <p><strong>Category: </strong>{{book.volumeInfo.categories}}</p>
+            <p class="book-description"> {{book.description}}</p>
+            <p><strong>Category: </strong>{{book.categories}}</p>
         </div>
         <div class="col-sm-6 right-column">
-            <h2 class="mb-3">Reviews</h2>
-            <div class="grid-container d-flex flex-wrap" style="max-height: 500px; overflow-y: scroll; margin-bottom: 30px">
+            <h2 class="">Add a Review</h2>
+            <form action="/bookinfo/{{book.bookId}}/reviews" method="post">
+                <textarea name="review" class="form-control mb-3"></textarea>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+            <h2 class="mt-3">Reviews</h2>
+            <div class="" style="max-height: 500px;margin-bottom: 30px">
                 {{#each reviews}}
-                    <div class="grid-box p-3 mb-3" style="background-color: rgba(255, 255, 255, 0.6); border: 1px solid #ccc">
-                        <p class="text-justify">{{ this.review }}</p>
+                    <div class="grid-box p-3 mb-3" style="background-color: rgba(255, 255, 255, 1); border: 1px solid #ccc">
+                        <p class="text-justify text-dark">{{ this.review }}</p>
                         <p class="text-muted">Reviewer: {{ this.userThatPostedReview }}</p>
                     </div>
                 {{/each}}
             </div>
-            <h2 class="mb-3">Add a Review</h2>
-            <form action="/bookinfo/{{book.id}}/reviews" method="post">
-                <textarea name="review" class="form-control mb-3"></textarea>
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
         </div>
     </div>
 </div>

@@ -2,6 +2,9 @@ const mongoCollections = require('../config/mongoCollections');
 const {ObjectId} = require("mongodb");
 const books = mongoCollections.books;
 const users = mongoCollections.users;
+const authData = require("./authData")
+const xss = require("xss")
+const authValidations = require("../utils/authValidations")
 
 const getBookByBookId = async (bookId) => {
     const bookCollection = await books()
@@ -10,11 +13,14 @@ const getBookByBookId = async (bookId) => {
     return book
 }
 
-const createBook = async (title, author, bookId) => {
+const createBook = async (title, authors, description, categories, bookId, thumbImage) => {
     let newBook = {
         title: title,
-        author: author,
+        authors: authors,
+        description: description,
+        categories: categories,
         bookId: bookId,
+        thumbImage: thumbImage,
         reviews: []
     }
 
@@ -52,4 +58,122 @@ const createReview = async (review, bookId, userId, username) => {
     return await getBookByBookId(bookId);
 }
 
-module.exports = {getBookByBookId, createBook, createReview}
+const getReviewsFromUsername = async (username) => {
+    username = xss(username).trim()
+
+    let errors = {}
+    let user = await authData.getUserByUsername(username)
+    
+    const booksCollection = await books()
+    const reviewsWithBookInformation = await booksCollection.find({reviews: {$elemMatch: {userThatPostedReview: username}}}).toArray()
+    if(reviewsWithBookInformation === null) {
+        errors.other = "No reviews found."
+        throw errors
+    }
+    return reviewsWithBookInformation
+}
+
+const getReviewById = async (reviewId) => {
+    reviewId = xss(reviewId).trim()
+
+    let errors = {}
+    authValidations.isValidId(reviewId, "review id", errors)
+
+    const booksCollection = await books()
+    const search = {
+        "reviews": {
+            $elemMatch: {
+                _id: new ObjectId(reviewId)
+            }
+        }
+    }
+    const projection = {
+        _id: 0,
+        "reviews.$": 1
+    }
+    const data = await booksCollection.findOne(search, {projection})
+    if(data.reviews === undefined) {
+        errors.other = "No reviews found with given ID."
+        throw errors
+    }
+    if(data.reviews[0] === undefined || data.reviews[0] == null){
+        errors.other = "No reviews found with given ID."
+        throw errors
+    }
+    return data.reviews[0]
+}
+
+const deleteReview = async (reviewId, username) => {
+    reviewId = xss(reviewId).trim()
+    username = xss(username).trim().toLowerCase()
+
+    let errors = {}
+    authValidations.isValidId(reviewId, "review id", errors)
+
+    let reviewFromDB = await getReviewById(reviewId)
+    if(reviewFromDB === null) {
+        errors.other = "No review found with given ID."
+        throw errors
+    }
+
+    if(reviewFromDB.userThatPostedReview !== username) {
+        errors.other = "trying to delete some one elses reviews."
+        throw errors
+    }
+
+    const bookWithThisReview = await getBookAssociatedWithThisReview(reviewId)
+    
+    const bookCollection = await books()
+    const deletionInfo = await bookCollection.updateOne(
+        {
+            _id: bookWithThisReview._id
+        }, 
+        {
+            $pull: {
+                reviews: {
+                    _id: new ObjectId(reviewId)
+                }
+            }
+        }
+    )
+    if(deletionInfo.modifiedCount === 0) {
+        errors.other = "Can not delete review at this moment, please try after some time."
+        throw "Not able to delete review from movies"
+    }
+    return "Deleted"
+}
+
+const getBookAssociatedWithThisReview = async (reviewId) => {
+    reviewId = xss(reviewId).trim()
+
+    let errors = {}
+    authValidations.isValidId(reviewId, "review id", errors)
+
+    const booksCollection = await books()
+    const search = {
+        "reviews": {
+            $elemMatch: {
+                _id: new ObjectId(reviewId)
+            }
+        }
+    }
+    const projection = {
+        _id: 1
+    }
+
+    const data = await booksCollection.findOne(search, {projection})
+    if(data === null) {
+        errors.other = "No book found with this review"
+        throw errors
+    }
+    return data
+}
+
+module.exports = {
+    getBookByBookId, 
+    createBook,
+    createReview,
+    getReviewsFromUsername,
+    getReviewById,
+    deleteReview
+}

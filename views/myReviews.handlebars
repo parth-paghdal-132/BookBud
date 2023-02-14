@@ -1,0 +1,55 @@
+<div class="container">
+    {{#each data}}
+    {{#with this}}
+    <div class="row rounded mt-3 mb-3" style="background-color: #ffffffab;">
+        <div class="col-4 text-center p-2 rounded" >
+            <img src="{{thumbImage}}" style="width: auto; max-height:250px">
+            <span class="fs-4 text-dark d-block">{{title}}</span>
+            <span class="fs-5 text-dark d-block">{{authors}}</span>
+        </div>
+        <div class="col-8 text-start ps-2 pe-2 pt-2 mb-2">
+            {{#each reviews}}
+            {{#with this}}
+            <div class="row" id="reviewRow">
+                <div class="col-10 text-dark">
+                    {{review}}
+                </div>
+                <div class="col-2 text-center">
+                    <button type="button" id="editReview" class="btn btn-primary" onclick="showEditReviewModal('{{_id}}', '{{review}}', this.parentNode.parentNode.parentNode, this.parentNode.parentNode)">
+                       Edit
+                    </button>
+                </div>
+                <hr class="my-2 text-dark">
+            </div>
+            {{/with}}
+            {{/each}}
+        </div>
+    </div>
+    {{/with}}
+    {{/each}}
+</div>
+
+<div class="modal fade" role="dialog" id="reviewEditDialog" tabindex="-1" aria-labelledby="reviewEditDialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content text-dark" id="passwordChangeConfirmationContent">
+            <div class="modal-header">
+                <h2 class="modal-title">Edit review</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger d-none" role="alert" id="reviewEditOtherError"></div>
+                <form id="editReviewForm">
+                    <label for="reviewMessage" class="form-label">Review message</label>
+                    <input type="text" class="form-control" id="reviewMessage" name="reviewMessage">
+                </form>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger me-3" id="reviewDelete">Delete</button> 
+                <button type="button" class="btn btn-primary" id="reviewUpdate">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/public/js/myReviewsValidation.js"></script>

@@ -101,10 +101,99 @@ const isValidId = (id, message, errors) => {
     } 
 }
 
+const checkPasswords = (
+    currentPassword,
+    newPassword,
+    confirmPassword,
+    errors
+  ) => {
+    let passwordPattern =/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/
+    currentPassword = currentPassword.trim()
+    newPassword = newPassword.trim()
+    confirmPassword = confirmPassword.trim()
+  
+    let isValidData = true
+    if (!currentPassword) {
+      errors.currentPassword = "You must supply current password."
+      isValidData = false
+    }
+  
+    if (!newPassword) {
+      errors.newPassword = "You must supply new password."
+      isValidData = false
+    }
+  
+    if (!confirmPassword) {
+      errors.confirmPassword = "You must supply confirm password."
+      isValidData = false
+    }
+  
+    if (!isValidData) {
+      throw errors;
+    }
+  
+    if (currentPassword.length === 0) {
+      errors.currentPassword = "Current password can not be blank."
+      isValidData = false
+    }
+  
+    if (newPassword.length === 0) {
+      errors.newPassword = "New password can not be blank."
+      isValidData = false
+    }
+  
+    if (confirmPassword.length === 0) {
+      errors.confirmPassword = "Confirm password can not be blank."
+      isValidData = false
+    }
+  
+    if (!isValidData) {
+      throw errors
+    }
+  
+    if (!passwordPattern.test(currentPassword)) {
+      errors.currentPassword =
+        "Your password do not match with the password criteria."
+      isValidData = false
+    }
+  
+    if (!passwordPattern.test(newPassword)) {
+      errors.newPassword =
+        "Your password do not match with the password criteria."
+      isValidData = false
+    }
+  
+    if (!passwordPattern.test(confirmPassword)) {
+      errors.confirmPassword =
+        "Your password do not match with the password criteria."
+      isValidData = false
+    }
+  
+    if (!isValidData) {
+      throw errors
+    }
+  
+    if (newPassword === currentPassword) {
+      errors.newPassword = "Your new password is the same as current password."
+      isValidData = false
+    }
+  
+    if (newPassword !== confirmPassword) {
+      errors.confirmPassword =
+        "Your confirm password do not match with the new password."
+      isValidData = false
+    }
+  
+    if (!isValidData) {
+      throw errors
+    }
+  }
+
 module.exports = {
     isValidUserName,
     isValidEmail,
     isValidPassword,
     isValidName,
     isValidId,
+    checkPasswords
 }

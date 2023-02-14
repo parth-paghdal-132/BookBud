@@ -3,6 +3,7 @@ const xss = require("xss")
 const data = require("../data")
 const { ObjectId } = require("mongodb")
 const authValidations = require("../utils/authValidations")
+const bcryptJS = require("bcryptjs")
 
 const router = express.Router()
 const authData = data.authData
@@ -194,5 +195,50 @@ router
     .get(async (req, res) => {
         req.session.destroy()
         return res.redirect("/")
+    })
+
+router
+    .route("/password")
+    .patch(async (req, res) => {
+        if(!req.session.user) {
+            return res.redirect("/auth/login")
+        }
+
+        let userId = xss(req.session.user._id).trim()
+        let errors = {}
+        try {
+            authValidations.isValidId(userId, "user id", errors)
+        } catch(exception) {
+            return res.redirect("/auth/login")
+        }
+
+        let currentPassword = xss(req.body.currentPassword).trim()
+        let newPassword = xss(req.body.newPassword).trim()
+        let confirmPassword = xss(req.body.confirmPassword).trim()
+
+        try {
+            authValidations.checkPasswords(currentPassword, newPassword, confirmPassword, errors)
+        } catch(exception) {
+            return res.status(400).json(exception)
+        }
+
+        let userFromDB = null
+        try {
+            userFromDB = await authData.getUserById(userId)
+            let isPasswordMatch = await bcryptJS.compare(currentPassword, userFromDB.password)
+            if(!isPasswordMatch) {
+                errors.currentPassword = "Your password do not match with current password."
+                return res.status(400).json(errors)
+            }
+        } catch(exception) {
+            return res.status(400).json(exception)
+        }
+
+        try {
+            let result = await authData.updatePassword(userId, currentPassword, newPassword, confirmPassword)
+            return res.status(200).json({"success":result})
+        } catch(exception) {
+            return res.status(400).json(exception)
+        }
     })
 module.exports = router

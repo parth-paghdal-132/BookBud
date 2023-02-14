@@ -1,0 +1,108 @@
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-7">
+            <h1 class="mb-5">My Profile</h1>
+            <div class="alert alert-danger d-none" role="alert" id="otherErrorArea"></div>
+            <div class="alert alert-success d-none" role="alert" id="successNotificationArea"></div>
+            <form action="/myprofile" method="post" id="profileInformationForm" class="needs-validation" novalidate>
+                <div class="mb-3">
+                    <label for="name" class="form-label">* Name</label>
+                    <input type="text" class="form-control" id="name" name="name">
+                    <div class="invalid-feedback" id="errName"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">* E-mail Address</label>
+                    <input type="email" class="form-control" id="email" name="email" disabled>
+                    <div class="invalid-feedback" id="errEmail"></div>
+                </div>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-7">
+                        <label for="username" class="form-label">* Username</label>
+                        <input type="text" class="form-control" id="username" name="username" placeholder="johnIsGreat" required>
+                        <div class="invalid-feedback" id="errUsername"></div>
+                        <div class="form-text" id="usernameInstruction">Your username must be greater than 2 character long and it should contain alphabets and number only.</div>
+                    </div>
+                    <div class="col-md-5 text-center">
+                        <label for="changePassword" class="form-label invisible">Change password</label>
+                        <button type="button" class="btn btn-primary ps-4 pe-4" id="changePassword" data-bs-toggle="modal" data-bs-target="#passwordChangeConfirmationDialog">Change Password</button>
+                    </div>
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary float-start ps-4 pe-4" id="updateProfile">Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" role="dialog" id="passwordChangeConfirmationDialog" tabindex="-1" aria-labelledby="passwordChangeConfirmationDialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content text-dark" id="passwordChangeConfirmationContent">
+            <div class="modal-header">
+                <h2 class="modal-title" id="passwordChangeConfirmationLabel">Change Password</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="">
+                        <label for="currentPassword" class="col-form-label">Current Password</label>
+                    </div>
+                    <div class="mb-3 input-group has-validation">
+                        <input type="password" class="form-control" id="currentPassword" name="currentPassword">
+                        <button class="btn btn-outline-secondary" type="button" id="currentPasswordToggle">
+                            <i class="bi-eye-slash-fill" id="currentPasswordToggleIcon"></i>
+                        </button>
+                        <div class="invalid-feedback" id="errCurrentPassword"></div>
+                    </div>
+                    <div>
+                        <label for="newPassword" class="col-form-label">New Password</label>
+                    </div>
+                    <div class="mb-3 input-group has-validation">
+                        <input type="password" class="form-control" id="newPassword" name="newPassword">
+                        <button class="btn btn-outline-secondary" type="button" id="newPasswordToggle">
+                            <i class="bi-eye-slash-fill" id="newPasswordToggleIcon"></i>
+                        </button>
+                        <div class="invalid-feedback" id="errNewPassword"></div>
+                    </div>
+                    <div>
+                        <label for="confirmPassword" class="form-label">Confirm Password</label>
+                    </div>
+                    <div class="mb-4 input-group has-validation">
+                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword">
+                        <button class="btn btn-outline-secondary" type="button" id="confirmPasswordToggle">
+                            <i class="bi-eye-slash-fill" id="confirmPasswordToggleIcon"></i>
+                        </button>
+                        <div class="invalid-feedback" id="errConfirmPassword"></div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-text text-dark">Your password must be greater than 5 character long and it should contain at least one lowercase letter, uppercase letter, number and special character.</div>
+                    </div>
+                </form>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary me-3" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="updatePassword">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/public/js/myProfileValidations.js"></script>
+
+<script>
+    {{#if hasData}}
+    const dataJsonString = `{{{data}}}`
+    fillData(JSON.parse(dataJsonString))
+    {{/if}}
+    {{#if hasError}}
+    const errorsJsonString = `{{{errors}}}`
+    console.log(errorsJsonString)
+    showErrors(JSON.parse(errorsJsonString))
+    {{/if}}
+    {{#if isUpdated}}
+    showSuccessUpdate()
+    {{else}}
+    hideSuccessUpdate()
+    {{/if}}
+</script>
