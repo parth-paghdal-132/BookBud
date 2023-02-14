@@ -5,7 +5,7 @@
 
 .book-description {
     width: 80%;
-    height: 250px;
+    max-height: 200px;
     overflow-y: scroll;
 }
 
