@@ -169,11 +169,44 @@ const getBookAssociatedWithThisReview = async (reviewId) => {
     return data
 }
 
+const updateReview = async (reviewId, reviewMessage, username) => {
+    reviewId = xss(reviewId).trim()
+    reviewMessage = xss(reviewMessage).trim()
+    username = xss(username).trim()
+
+    let errors = {}
+    authValidations.isValidId(reviewId, "review id", errors)
+    authValidations.isValidReview(reviewMessage, errors)
+    authValidations.isValidUserName(username, errors)
+
+    let reviewFromDB = await getReviewById(reviewId)
+    if(reviewFromDB == null) {
+        errors.other = "No review with this id"
+        throw errors
+    }
+    if(reviewFromDB.userThatPostedReview !== username) {
+        errors.other = "Trying to update someone elses review."
+        throw errors
+    }
+
+    const booksCollection = await books()
+    const updateInfo = await booksCollection.updateOne({"reviews._id": new ObjectId(reviewId)},
+    { $set: {"reviews.$[elem]":{review: reviewMessage, _id: new ObjectId(reviewId), userThatPostedReview: username}}},
+    { arrayFilters:[{"elem._id": new ObjectId(reviewId)}]})
+
+    if(updateInfo.modifiedCount == 0) {
+        errors.other = "Can not update review at this moment, please try after some time."
+        throw errors
+    }
+    return "Updated"
+}
+
 module.exports = {
     getBookByBookId, 
     createBook,
     createReview,
     getReviewsFromUsername,
     getReviewById,
-    deleteReview
+    deleteReview,
+    updateReview
 }

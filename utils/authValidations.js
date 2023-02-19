@@ -189,11 +189,29 @@ const checkPasswords = (
     }
   }
 
+const isValidReview = (message, errors) => {
+  if(!message) {
+    errors.reviewMessage = "Review message can not be blank."
+    throw errors
+  }
+  if(typeof message !== "string") {
+    errors.reviewMessage = "Invalid review message provided."
+    throw errors
+  }
+
+  if(message.length == 0) {
+    errors.reviewMessage = "Review message can not be blank."
+    throw errors
+  }
+
+}
+
 module.exports = {
     isValidUserName,
     isValidEmail,
     isValidPassword,
     isValidName,
     isValidId,
-    checkPasswords
+    checkPasswords,
+    isValidReview
 }

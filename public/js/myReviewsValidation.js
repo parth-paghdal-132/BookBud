@@ -11,7 +11,7 @@ function showEditReviewModal(reviewId, reviewMessage, parent, reviewRow) {
     })
 
     btnReviewUpdate.addEventListener("click", (event) => {
-        updateReview(reviewId, txtReviewMessage.value)
+        updateReview(reviewId, txtReviewMessage.value, reviewRow)
     })
 }
 
@@ -54,6 +54,40 @@ function deleteReview(reviewId, parent, reviewRow) {
     })
 }
 
-function updateReview(reviewId, reviewMessage) {
+function updateReview(reviewId, reviewMessage, reviewRow) {
+    let divReviewEditOtherError = document.getElementById("reviewEditOtherError")
+    if(!reviewId) {
+        divReviewEditOtherError.classList.remove("d-none")
+        divReviewEditOtherError.innerText = "Invalid operation"
+    } else if(reviewId.length === 0) {
+        divReviewEditOtherError.classList.remove("d-none")
+        divReviewEditOtherError.innerText = "Invalid operation"
+    } else {
+        divReviewEditOtherError.classList.add("d-none")
+    }
 
+    let data = {
+        message: reviewMessage
+    }
+    $.ajax({
+        url: `/myreviews/${reviewId}`,
+        type: "PUT",
+        contentType:'application/json',
+        dataType: 'json',
+        data: JSON.stringify(data),
+        success: function (data) {
+            $("#reviewEditDialog").modal("hide")
+            reviewRow.children[0].innerText = reviewMessage
+        },
+        error: function (data) {
+            let errors = JSON.parse(data.responseText)
+
+            if(errors.other) {
+                divReviewEditOtherError.innerText = errors.other
+                divReviewEditOtherError.classList.remove("d-none")
+            } else {
+                divReviewEditOtherError.classList.add("d-none")
+            }
+        }
+    })
 }
