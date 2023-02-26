@@ -29,8 +29,14 @@ app.use(
 )
 
 app.post('/bookinfo/:bookId/reviews', (req, res, next) => {
+	console.log(req.session.user)
 	if (!req.session.user) {
-		return res.redirect('/auth/login')
+		if (req.query.fromAxios) {
+			return res.json({redirect: `/auth/login?bookId=${req.params.bookId}`})
+		}
+		else {
+			return res.redirect(`/auth/login?bookId=${req.params.bookId}`)
+		}
 	}
 	next();
 

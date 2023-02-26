@@ -13,7 +13,7 @@ const getBookByBookId = async (bookId) => {
     return book
 }
 
-const createBook = async (title, authors, description, categories, bookId, thumbImage) => {
+const createBook = async (title, authors, description, categories, bookId, thumbImage, previewLink) => {
     let newBook = {
         title: title,
         authors: authors,
@@ -21,6 +21,7 @@ const createBook = async (title, authors, description, categories, bookId, thumb
         categories: categories,
         bookId: bookId,
         thumbImage: thumbImage,
+        previewLink: previewLink,
         reviews: []
     }
 
@@ -54,6 +55,7 @@ const createReview = async (review, bookId, userId, username) => {
     if (updatedInfo.modifiedCount === 0) {
         throw 'Could not update review in user document successfully';
     }
+
 
     return await getBookByBookId(bookId);
 }

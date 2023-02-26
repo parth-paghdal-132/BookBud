@@ -1,29 +1,46 @@
+<p id="bookId" hidden>{{book.bookId}}</p>
 <div class="container">
     <div class="row">
         <div class="col-sm-6 left-column">
-            <h2 class="mb-3"> {{book.title}}</h2>
-            <img src="{{ book.thumbImage }}" class="book-image img-fluid mb-3" alt="Book Cover">
+            <p id="previewLink" hidden>{{book.previewLink}}</p>
+            <h2 id="bookTitle" class="mb-3">{{#if book.title}}{{{book.title}}}{{/if}}</h2>
+            {{#if book.thumbImage}}
+                <img id="bookCover" src="{{{book.thumbImage}}}" class="book-image img-fluid mb-3" alt="Book Cover">
+            {{else}}
+                <img src="/public/icons/no_image_available.jpeg" class="book-image img-fluid mb-3" alt="No Image Available">
+            {{/if}}
             <h3 class="mb-3">Volume Information</h3>
-            <p><strong>Author(s): </strong>{{book.authors}}</p>
-            <p><strong>Description: </strong></p>
-            <p class="book-description"> {{book.description}}</p>
-            <p><strong>Category: </strong>{{book.categories}}</p>
+            {{#if book.authors}}
+                <p><strong>Author(s): </strong>{{{book.authors}}}</p>
+            {{/if}}
+            {{#if book.description}}
+                <div class="book-description"><strong>Description: </strong>{{{book.description}}}</div>
+            {{/if}}
+            {{#if book.categories}}
+                <p style="margin-top: 30px"><strong>Category: </strong>{{{book.categories}}}</p>
+            {{/if}}
         </div>
         <div class="col-sm-6 right-column">
             <h2 class="">Add a Review</h2>
             <form action="/bookinfo/{{book.bookId}}/reviews" method="post">
-                <textarea name="review" class="form-control mb-3"></textarea>
+                <textarea required id="reviewTextArea" name="review" class="form-control mb-3"></textarea>
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form>
             <h2 class="mt-3">Reviews</h2>
-            <div class="" style="max-height: 500px;margin-bottom: 30px">
-                {{#each reviews}}
-                    <div class="grid-box p-3 mb-3" style="background-color: rgba(255, 255, 255, 1); border: 1px solid #ccc">
-                        <p class="text-justify text-dark">{{ this.review }}</p>
-                        <p class="text-muted">Reviewer: {{ this.userThatPostedReview }}</p>
-                    </div>
-                {{/each}}
+            <div class="reviews-container" style="max-height: 500px;margin-bottom: 30px">
+                {{#if reviews.length}}
+                    {{#each reviews}}
+                        <div class="grid-box p-3 mb-3" style="background-color: rgba(255, 255, 255, 1); border: 1px solid #ccc">
+                            <p class="text-justify text-dark">{{ this.review }}</p>
+                            <p class="text-muted">Reviewer: {{ this.userThatPostedReview }}</p>
+                        </div>
+                    {{/each}}
+                {{else}}
+                    <p>No reviews yet</p>
+                {{/if}}
             </div>
         </div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/public/js/bookInfo.js"></script>

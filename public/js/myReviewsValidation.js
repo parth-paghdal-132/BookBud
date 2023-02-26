@@ -1,3 +1,27 @@
+const bookCovers = document.querySelectorAll('.col-4 img');
+const bookTitles = document.querySelectorAll('.col-4 #bookTitle');
+
+// add click event listener to each book cover
+bookCovers.forEach((bookCover) => {
+    bookCover.addEventListener('click', (event) => {
+        const bookId = event.target.previousElementSibling.textContent;
+        linkToBookInfoPage(bookId)
+    });
+});
+
+// add click event listener to each book title
+bookTitles.forEach((bookTitle) => {
+    bookTitle.addEventListener('click', (event) => {
+        const bookId = event.target.previousElementSibling.previousElementSibling.textContent;
+        linkToBookInfoPage(bookId)
+    });
+});
+
+function linkToBookInfoPage(bookId) {
+    window.location.href = `/bookinfo/${bookId}`
+}
+
+
 function showEditReviewModal(reviewId, reviewMessage, parent, reviewRow) {
     $("#reviewEditDialog").modal("show")
     let txtReviewMessage = document.getElementById("reviewMessage")

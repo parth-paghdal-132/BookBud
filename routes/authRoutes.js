@@ -16,10 +16,12 @@ router
         }
         let data = {}
         let errors = {}
+        console.log(req.query.bookId)
         return res.status(200).render("login", {
             title: "Login",
             showNav: false,
             hasErrors: false,
+            bookId: req.query.bookId,
             data: JSON.stringify(data),
             errors: JSON.stringify(errors)
         })
@@ -67,7 +69,12 @@ router
                 name: user.name,
                 username: user.username
             }
-            return res.redirect("/")
+            if (req.query.bookId) {
+                return res.redirect(`/bookinfo/${req.query.bookId}`)
+            }
+            else {
+                return res.redirect("/")
+            }
         } catch(exception) {
             return res.status(200).render("login", {
                 title: "Login",

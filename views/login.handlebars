@@ -7,7 +7,7 @@
             </div>
             <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1 p-5">
                 <div class="alert alert-danger d-none" role="alert" id="otherErrors"></div>
-                <form class="needs-validation mb-5" action="/auth/login" method="post" id="loginForm">
+                <form class="needs-validation mb-5" {{#if bookId}} action="/auth/login?bookId={{bookId}}"{{else}} action="/auth/login"{{/if}} method="post" id="loginForm">
                     <div class="mb-3">
                         <label for="email" class="form-label">* E-mail</label>
                         <input type="email" class="form-control" id="email" name="email" placeholder="john.doe@email.com" required>
