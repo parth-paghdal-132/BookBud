@@ -137,6 +137,7 @@ const getUserById = async (userId) => {
 const getUserByUsername = async (username) => {
     username = xss(username.trim())
 
+    let errors = {}
     const usersCollection = await users()
     const user = await usersCollection.findOne({username: username})
     if(user == null) {

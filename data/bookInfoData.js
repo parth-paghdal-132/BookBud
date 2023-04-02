@@ -203,6 +203,35 @@ const updateReview = async (reviewId, reviewMessage, username) => {
     return "Updated"
 }
 
+const getReviewsByUsername = async (username) => {
+    let errors = {}
+    username = xss(username).trim()
+
+    authValidations.isValidUserName(username, errors)
+    const booksCollection = await books()
+    const search = {
+        "reviews": {
+            $elemMatch: {
+                userThatPostedReview: username
+            }
+        }
+    }
+    const projection = {
+        _id: 0,
+        thumbImage: 1,
+        title: 1,
+        authors: 1,
+        "reviews.$": 1
+    }
+    const data = await booksCollection.find(search, {projection})
+    if(!data) {
+        errors.other = "No reviews found with given username."
+        throw errors
+    }
+
+    return data
+}
+
 module.exports = {
     getBookByBookId, 
     createBook,
@@ -210,5 +239,6 @@ module.exports = {
     getReviewsFromUsername,
     getReviewById,
     deleteReview,
-    updateReview
+    updateReview,
+    getReviewsByUsername
 }

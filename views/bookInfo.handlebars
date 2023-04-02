@@ -32,7 +32,7 @@
                     {{#each reviews}}
                         <div class="grid-box p-3 mb-3" style="background-color: rgba(255, 255, 255, 1); border: 1px solid #ccc">
                             <p class="text-justify text-dark">{{ this.review }}</p>
-                            <p class="text-muted">Reviewer: {{ this.userThatPostedReview }}</p>
+                            <p class="text-muted">Reviewer: <a href="/reviews/{{this.userThatPostedReview}}">{{ this.userThatPostedReview }}</a></p>
                         </div>
                     {{/each}}
                 {{else}}

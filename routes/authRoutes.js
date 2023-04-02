@@ -16,7 +16,6 @@ router
         }
         let data = {}
         let errors = {}
-        console.log(req.query.bookId)
         return res.status(200).render("login", {
             title: "Login",
             showNav: false,

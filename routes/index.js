@@ -3,6 +3,7 @@ const mainRoutes = require("./mainRoutes")
 const bookInfoRoutes = require("./bookInfoRoutes")
 const myProfileRoutes = require("./myProfileRoutes")
 const myReviewRoutes = require("./myReviewRoutes")
+const reviewRoutes = require("./reviewRoutes")
 
 const configRoutes = (app) => {
     app.use("/", mainRoutes)
@@ -10,6 +11,7 @@ const configRoutes = (app) => {
     app.use("/bookinfo", bookInfoRoutes)
     app.use("/myprofile", myProfileRoutes)
     app.use("/myreviews", myReviewRoutes)
+    app.use("/reviews", reviewRoutes)
 
     app.use("*", (req, res) => {
         return res.status(404).json({error: "Page not found"})

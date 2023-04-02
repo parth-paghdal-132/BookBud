@@ -1,0 +1,45 @@
+<h1 id="headingError"></h1>
+<div class="container">
+    {{#each data}}
+    {{#with this}}
+    <div class="row rounded mt-3 mb-3" style="background-color: #ffffffab;">
+        <div class="col-4 text-center p-2 rounded" >
+            <p hidden>{{bookId}}</p>
+            <img src="{{thumbImage}}" style="width: auto; max-height:250px; cursor: pointer">
+            <span style="cursor: pointer" id="bookTitle" class="fs-4 text-dark d-block">{{title}}</span>
+            <span class="fs-5 text-dark d-block">{{authors}}</span>
+        </div>
+        <div class="col-8 text-start ps-2 pe-2 pt-2 mb-2">
+            <h2 class="text-dark">Reviews</h2>
+            {{#each reviews}}
+            {{#with this}}
+            <div class="row" id="reviewRow">
+                <div class="col-10 text-dark">
+                    {{review}}
+                </div>
+                <hr class="my-2 text-dark">
+            </div>
+            {{/with}}
+            {{/each}}
+        </div>
+    </div>
+    {{/with}}
+    {{/each}}
+</div>
+
+<script>
+    let error = null
+    {{#if hasErrors}}
+    let errorJsonString = `{{{errors}}}`
+    error = JSON.parse(errorJsonString)
+    {{/if}}
+    if(error) {
+        let headingError = document.getElementById("headingError")
+        if(error.other) {
+            headingError.innerText = error.other
+        }
+        if(error.username){
+            headingError.innerText = error.username
+        }
+    }
+</script>
