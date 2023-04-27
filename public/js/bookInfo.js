@@ -79,7 +79,7 @@ function createReviewElement(reviewData) {
     newReviewElement.style.border = '1px solid #ccc';
     newReviewElement.innerHTML = `
   <p class="text-justify text-dark">${reviewData.review}</p>
-  <p class="text-muted">Reviewer: ${reviewData.userThatPostedReview}</p>
+  <p class="text-muted">Reviewer: <a href="/reviews/${reviewData.userThatPostedReview}">${reviewData.userThatPostedReview}</a></p>
 `;
 
 
