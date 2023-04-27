@@ -24,6 +24,7 @@ router
 
         try {
             let reviewsWithBookInformation = await bookInfoData.getReviewsFromUsername(username)
+            console.log('data', reviewsWithBookInformation)
             return res.status(200).render("myReviews", {
                 data: reviewsWithBookInformation,
                 title: "My Reviews",
@@ -50,6 +51,8 @@ router
         }
         reviewId = xss(req.params.reviewId).trim()
         username = xss(req.session.user.username).trim().toLowerCase()
+
+        // console.log('review', reviewId);
         
         try {
             authValidations.isValidId(reviewId, "review id", errors)
@@ -58,6 +61,7 @@ router
         }
 
         let reviewFromDB = null
+
         try {
             reviewFromDB = await bookInfoData.getReviewById(reviewId)
             if(reviewFromDB === null) {
@@ -68,10 +72,13 @@ router
             return res.status(400).json(errors)
         }
 
+
         if(reviewFromDB.userThatPostedReview !== username) {
             errors.other = "Trying to delete someone elses review."
             return res.status(400).json(errors)
         }
+
+        console.log('sup')
 
         try {
             let data = await bookInfoData.deleteReview(reviewId, username)

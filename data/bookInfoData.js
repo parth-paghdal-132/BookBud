@@ -1,7 +1,6 @@
 const mongoCollections = require('../config/mongoCollections');
 const {ObjectId} = require("mongodb");
 const books = mongoCollections.books;
-const users = mongoCollections.users;
 const authData = require("./authData")
 const xss = require("xss")
 const authValidations = require("../utils/authValidations")
@@ -33,27 +32,17 @@ const createBook = async (title, authors, description, categories, bookId, thumb
 }
 
 const createReview = async (review, bookId, userId, username) => {
-    const newReview = {_id: new ObjectId(), userThatPostedReview: username, review: review}
-    const newUserReview = {bookId: bookId, review: review}
+    const newReview = {_id: new ObjectId().toString(), userThatPostedReview: username, review: review}
 
     const bookCollection = await books()
-    const userCollection = await users()
     const updatedBook = {
         reviews: newReview
     }
 
-    const updatedUser = {
-        reviews: newUserReview
-    }
 
     let updatedInfo = await bookCollection.updateOne({bookId: bookId}, {$push: updatedBook});
     if (updatedInfo.modifiedCount === 0) {
         throw 'Could not create review successfully';
-    }
-
-    updatedInfo = await userCollection.updateOne({_id: new ObjectId(userId)}, {$push: updatedUser})
-    if (updatedInfo.modifiedCount === 0) {
-        throw 'Could not update review in user document successfully';
     }
 
 
@@ -81,11 +70,13 @@ const getReviewById = async (reviewId) => {
     let errors = {}
     authValidations.isValidId(reviewId, "review id", errors)
 
+
+
     const booksCollection = await books()
     const search = {
         "reviews": {
             $elemMatch: {
-                _id: new ObjectId(reviewId)
+                _id: reviewId
             }
         }
     }
@@ -93,7 +84,9 @@ const getReviewById = async (reviewId) => {
         _id: 0,
         "reviews.$": 1
     }
+
     const data = await booksCollection.findOne(search, {projection})
+    console.log(data);
     if(data.reviews === undefined) {
         errors.other = "No reviews found with given ID."
         throw errors
@@ -102,6 +95,7 @@ const getReviewById = async (reviewId) => {
         errors.other = "No reviews found with given ID."
         throw errors
     }
+
     return data.reviews[0]
 }
 
@@ -111,6 +105,8 @@ const deleteReview = async (reviewId, username) => {
 
     let errors = {}
     authValidations.isValidId(reviewId, "review id", errors)
+
+
 
     let reviewFromDB = await getReviewById(reviewId)
     if(reviewFromDB === null) {
@@ -124,6 +120,8 @@ const deleteReview = async (reviewId, username) => {
     }
 
     const bookWithThisReview = await getBookAssociatedWithThisReview(reviewId)
+
+    console.log(bookWithThisReview)
     
     const bookCollection = await books()
     const deletionInfo = await bookCollection.updateOne(
@@ -133,7 +131,7 @@ const deleteReview = async (reviewId, username) => {
         {
             $pull: {
                 reviews: {
-                    _id: new ObjectId(reviewId)
+                    _id: reviewId
                 }
             }
         }
@@ -155,7 +153,7 @@ const getBookAssociatedWithThisReview = async (reviewId) => {
     const search = {
         "reviews": {
             $elemMatch: {
-                _id: new ObjectId(reviewId)
+                _id: reviewId
             }
         }
     }
@@ -192,9 +190,9 @@ const updateReview = async (reviewId, reviewMessage, username) => {
     }
 
     const booksCollection = await books()
-    const updateInfo = await booksCollection.updateOne({"reviews._id": new ObjectId(reviewId)},
-    { $set: {"reviews.$[elem]":{review: reviewMessage, _id: new ObjectId(reviewId), userThatPostedReview: username}}},
-    { arrayFilters:[{"elem._id": new ObjectId(reviewId)}]})
+    const updateInfo = await booksCollection.updateOne({"reviews._id": reviewId},
+    { $set: {"reviews.$[elem]":{review: reviewMessage, _id: reviewId, userThatPostedReview: username}}},
+    { arrayFilters:[{"elem._id": reviewId}]})
 
     if(updateInfo.modifiedCount == 0) {
         errors.other = "Can not update review at this moment, please try after some time."

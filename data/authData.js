@@ -39,7 +39,6 @@ const createUser = async (name, email, username, password, reEnterPassword) => {
 		username: username.toLowerCase(),
         email: email,
 		password: hashedPassword,
-        reviews: []
 	}
     const usersCollection = await users()
     const insertInfo = await usersCollection.insertOne(user)
