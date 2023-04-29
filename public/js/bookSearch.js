@@ -25,6 +25,7 @@ window.onload = function() {
             data.items.forEach(book => {
                 const bookCard = bookCardTemplate
                     .replace('src=""', `src="${book.volumeInfo.imageLinks.thumbnail}"`)
+                    .replace('alt=""', `alt=${book.volumeInfo.title}`)
                     .replace('href=""', `href="/bookinfo/${book.id}"`)
                     .replace('<h5 class="card-title"></h5>', `<h5 class="card-title">${book.volumeInfo.title}</h5>`);
 
