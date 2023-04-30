@@ -1,5 +1,5 @@
 # BookBud
-BookBud is a web application where user can read and write review regarding to the specific book.
+BookBud is a web application where users can read and write book reviews.
 
 This is our academic group project for Course CS-545 Human-Computer Interaction and group members are 
 1. Michael Scoli (mscoli@stevens.edu)
