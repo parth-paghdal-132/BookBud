@@ -35,4 +35,4 @@ It needs few software to be downloaded first to run app.
 
 9. Now wait for a 1-2 second when you see message like `Your server is running at http://localhost:3000` in command prompt or terminal (don't stop the process or kill the terminal) hit http://localhost:3000 this url to your browser and you will see the app is running.
 
-10. Once you are done with the exploring site come again to the command prompt and kill the process. Which will stop ther server.
+10. Once you are done with the exploring site come again to the command prompt and kill the process. Which will stop the server.
